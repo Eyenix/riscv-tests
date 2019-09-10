@@ -123,22 +123,43 @@ void _init(int cid, int nc)
   exit(ret);
 }
 
-#undef putchar
-int putchar(int ch)
+#define	UART_CSR  0x44a00000
+#define	UART_TX   0x44a00010
+#define	MCK_FREQ  50000000
+void Uart_Init(uint32_t Baud_Rate)
 {
-  static __thread char buf[64] __attribute__((aligned(64)));
-  static __thread int buflen = 0;
-
-  buf[buflen++] = ch;
-
-  if (ch == '\n' || buflen == sizeof(buf))
-  {
-    syscall(SYS_write, 1, (uintptr_t)buf, buflen);
-    buflen = 0;
-  }
-
-  return 0;
+	volatile uint32_t *pUart = (uint32_t *)(UART_CSR);
+	*pUart =  (uint32_t)(((MCK_FREQ / (Baud_Rate << 4)) - 1) << 20) | 0x00002040u;
 }
+int Uart_putchar(int ch)
+{
+	volatile uint32_t *tx = (uint32_t *)(UART_TX);
+	volatile uint32_t *csr = (uint32_t *)(UART_CSR);
+
+	while(*csr & 0x20);
+	*tx = ((uint32_t)ch) << 8;
+
+	return 0;
+}
+
+#undef putchar
+//int putchar(int ch)
+//{
+//  static __thread char buf[64] __attribute__((aligned(64)));
+//  static __thread int buflen = 0;
+//
+//  buf[buflen++] = ch;
+//
+//  if (ch == '\n' || buflen == sizeof(buf))
+//  {
+//    syscall(SYS_write, 1, (uintptr_t)buf, buflen);
+//    buflen = 0;
+//  }
+//
+//  return 0;
+//	Uart_putchar(ch);
+//}
+#define	putchar Uart_putchar
 
 void printhex(uint64_t x)
 {

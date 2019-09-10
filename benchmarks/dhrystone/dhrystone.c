@@ -180,6 +180,6 @@ Enumeration Enum_Par_Val;
     return (false);
 } /* Func_3 */
 
-void debug_printf(const char* str, ...)
-{
-}
+//void debug_printf(const char* str, ...)
+//{
+//}

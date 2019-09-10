@@ -381,7 +381,8 @@ extern clock_t	clock();
 
 #elif defined(__riscv)
 
-#define HZ 1000000
+//#define HZ 1000000
+#define HZ 90000000L
 #define Too_Small_Time 1
 #define CLOCK_TYPE "rdcycle()"
 #define Start_Timer() Begin_Time = read_csr(mcycle)
@@ -413,7 +414,8 @@ struct tms      time_info;
 
 
 #define Mic_secs_Per_Second     1000000
-#define NUMBER_OF_RUNS		500 /* Default number of runs */
+//#define NUMBER_OF_RUNS		500 /* Default number of runs */
+#define NUMBER_OF_RUNS		600000
 
 #ifdef  NOSTRUCTASSIGN
 #define structassign(d, s)      memcpy(&(d), &(s), sizeof(d))

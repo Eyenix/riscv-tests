@@ -11,7 +11,9 @@
 
 #include "dhrystone.h"
 
-void debug_printf(const char* str, ...);
+//void debug_printf(const char* str, ...);
+#define debug_printf printf
+void Uart_Init();
 
 #include "util.h"
 
@@ -72,6 +74,7 @@ int main (int argc, char** argv)
   Number_Of_Runs = NUMBER_OF_RUNS;
 
   /* Initializations */
+  Uart_Init(115200);
 
   Next_Ptr_Glob = (Rec_Pointer) alloca (sizeof (Rec_Type));
   Ptr_Glob = (Rec_Pointer) alloca (sizeof (Rec_Type));
